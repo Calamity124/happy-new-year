@@ -1,0 +1,93 @@
+using System;
+using Microsoft.VisualBasic;
+
+class Program
+{
+    static void Main()
+    {
+        string? name;
+        string? pass;
+        int guess;
+        bool run = false;  
+        bool correct;  
+        string? file = "info.txt";
+
+      
+         
+
+        Console.WriteLine("------- Guessing Number Game -------");
+        Console.WriteLine();
+
+        Console.Write("Enter your name: ");
+        name = Console.ReadLine();
+
+        // PASSWORD CHECK
+        while (true)
+        {
+            Console.Write("Enter your 4-digit password (0–9): ");
+            pass = Console.ReadLine();
+
+            if (pass != null && pass.Length == 4 && int.TryParse(pass, out _))
+            {
+                break;
+            }
+
+            Console.WriteLine("Invalid input! Enter exactly 4 digits.\n");
+        }
+
+        Console.WriteLine("Password accepted!");
+        Console.WriteLine();
+
+        File.WriteAllText(file, $"Name: {name} \nPassword: {pass}");
+
+       
+
+        // GAME LOOP
+        do
+        {
+        Random random = new Random();
+        int num = random.Next(1, 101);
+            
+            correct = false;
+
+            for (int attempt = 1; attempt <= 4; attempt++)
+            {
+                Console.Write($"Attempt {attempt}/4 - Enter your guess: ");
+    
+
+                if(!int.TryParse(Console.ReadLine(), out guess))
+                {
+                    attempt--;
+                    continue;   
+                }
+
+                if (guess == num)
+                {
+                    Console.WriteLine("You've guessed it right!");
+                    correct = true;
+                    break;                   // TODO: Should the loop continue after this?
+                }
+                else
+                {
+                    Console.WriteLine("Wrong guess!");
+                }
+            }
+            if (!correct)
+            Console.WriteLine($"Game Over! The correct answer is {num}");
+
+            Console.Write("Do you want to play again? (Y/N): ");
+            string? play = Console.ReadLine();
+
+            if( play == "Y" || play == "y")
+            {
+                run = true;
+            }
+            else
+            {
+                Console.WriteLine("Thank you for playing!");
+                run = false;
+            }
+
+        } while (run); // TODO: Should this always be true?
+    }
+}
